@@ -4,17 +4,27 @@ import type { LoginCredentials, RegisterData, AuthResponse, Usuario } from '@/ty
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     const { data } = await apiClient.post('/auth/login', credentials)
-    return data
+    // Backend devuelve 'usuario', frontend espera 'user'
+    return {
+      user: data.data.usuario,
+      escuela: data.data.usuario.escuela,
+      token: data.data.token,
+    }
   },
 
   register: async (registerData: RegisterData): Promise<AuthResponse> => {
     const { data } = await apiClient.post('/auth/register', registerData)
-    return data
+    // Backend devuelve 'usuario', frontend espera 'user'
+    return {
+      user: data.data.usuario,
+      escuela: data.data.escuela,
+      token: data.data.token,
+    }
   },
 
   me: async (): Promise<Usuario> => {
     const { data } = await apiClient.get('/auth/me')
-    return data
+    return data.data
   },
 
   logout: async (): Promise<void> => {

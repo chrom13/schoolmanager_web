@@ -117,14 +117,24 @@ export function Sidebar() {
   const filteredSections = navigationSections.map((section) => ({
     ...section,
     items: section.items.filter(
-      (item) => !item.roles || item.roles.includes(user?.rol as UserRole)
+      (item) => {
+        if (!item.roles) return true
+        // Si no hay usuario, mostrar solo items de director (modo dev)
+        if (!user) {
+          return item.roles.includes(UserRole.DIRECTOR)
+        }
+        // Comparar como strings para evitar problemas de tipo
+        const userRoleStr = String(user.rol).toLowerCase()
+        const allowedRoles = item.roles.map(r => String(r).toLowerCase())
+        return allowedRoles.includes(userRoleStr)
+      }
     ),
   })).filter((section) => section.items.length > 0)
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r border-gray-200 transition-transform">
+    <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r border-gray-200 transition-transform flex flex-col">
       {/* Logo */}
-      <div className="h-16 flex items-center justify-center border-b border-gray-200">
+      <div className="h-16 flex items-center justify-center border-b border-gray-200 flex-shrink-0">
         <Link to="/" className="flex items-center space-x-2">
           <img
             src="/theme/img/logo.png"
@@ -169,16 +179,16 @@ export function Sidebar() {
       </nav>
 
       {/* User Info */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-gray-200 flex-shrink-0">
         <div className="flex items-center space-x-3">
           <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
-            {user?.nombre.charAt(0).toUpperCase()}
+            {user?.nombre ? user.nombre.charAt(0).toUpperCase() : 'U'}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">
-              {user?.nombre}
+              {user?.nombre || 'Usuario'}
             </p>
-            <p className="text-xs text-gray-500 capitalize">{user?.rol}</p>
+            <p className="text-xs text-gray-500 capitalize">{user?.rol || 'Sin sesión'}</p>
           </div>
         </div>
       </div>

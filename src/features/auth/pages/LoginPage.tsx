@@ -61,18 +61,14 @@ export default function LoginPage() {
   })
 
   const onSubmit = (data: LoginForm) => {
-    console.log('Form submitted, clearing previous errors')
     setErrorMessage(null)
     clearErrors()
     loginMutation.mutate(data)
   }
 
   const handleDismissError = () => {
-    console.log('Manually dismissing error')
     setErrorMessage(null)
   }
-
-  console.log('LoginPage render, errorMessage:', errorMessage, 'isPending:', loginMutation.isPending)
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">

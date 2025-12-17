@@ -15,6 +15,9 @@ import GradosPage from '@/features/estructura/pages/GradosPage'
 import GruposPage from '@/features/estructura/pages/GruposPage'
 import MateriasPage from '@/features/estructura/pages/MateriasPage'
 
+// Alumnos
+import AlumnosPage from '@/features/alumnos/pages/AlumnosPage'
+
 export const router = createBrowserRouter([
   {
     path: '/login',
@@ -55,7 +58,7 @@ export const router = createBrowserRouter([
           // Otros módulos
           {
             path: 'alumnos',
-            element: <div className="text-center p-8">Página de Alumnos - Próximamente</div>,
+            element: <AlumnosPage />,
           },
           {
             path: 'calificaciones',

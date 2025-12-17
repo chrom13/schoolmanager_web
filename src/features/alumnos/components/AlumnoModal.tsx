@@ -243,14 +243,14 @@ export function AlumnoModal({ open, onClose, alumno }: AlumnoModalProps) {
               <div className="space-y-2">
                 <Label htmlFor="grupo_id">Grupo</Label>
                 <Select
-                  value={selectedGrupoId}
-                  onValueChange={(value) => setValue('grupo_id', value)}
+                  value={selectedGrupoId || 'none'}
+                  onValueChange={(value) => setValue('grupo_id', value === 'none' ? undefined : value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecciona un grupo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Sin asignar</SelectItem>
+                    <SelectItem value="none">Sin asignar</SelectItem>
                     {grupos?.map((grupo) => (
                       <SelectItem key={grupo.id} value={String(grupo.id)}>
                         {grupo.grado?.nivel?.nombre} - {grupo.grado?.nombre} {grupo.nombre}
@@ -263,14 +263,14 @@ export function AlumnoModal({ open, onClose, alumno }: AlumnoModalProps) {
               <div className="space-y-2">
                 <Label htmlFor="tutor_id">Tutor</Label>
                 <Select
-                  value={selectedTutorId}
-                  onValueChange={(value) => setValue('tutor_id', value)}
+                  value={selectedTutorId || 'none'}
+                  onValueChange={(value) => setValue('tutor_id', value === 'none' ? undefined : value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecciona un tutor" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Sin asignar</SelectItem>
+                    <SelectItem value="none">Sin asignar</SelectItem>
                     {tutores?.map((tutor) => (
                       <SelectItem key={tutor.id} value={String(tutor.id)}>
                         {tutor.nombre}

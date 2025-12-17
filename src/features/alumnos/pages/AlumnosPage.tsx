@@ -40,7 +40,7 @@ export default function AlumnosPage() {
   const [selectedAlumno, setSelectedAlumno] = useState<Alumno | null>(null)
   const [alumnoToDelete, setAlumnoToDelete] = useState<Alumno | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedGrupoFilter, setSelectedGrupoFilter] = useState<string>('')
+  const [selectedGrupoFilter, setSelectedGrupoFilter] = useState<string>('all')
 
   const handleEdit = (alumno: Alumno) => {
     setSelectedAlumno(alumno)
@@ -72,7 +72,7 @@ export default function AlumnosPage() {
       alumno.apellido_materno?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       alumno.matricula.toLowerCase().includes(searchQuery.toLowerCase())
 
-    const matchesGrupo = selectedGrupoFilter === '' ||
+    const matchesGrupo = selectedGrupoFilter === 'all' ||
       String(alumno.grupo_id) === selectedGrupoFilter
 
     return matchesSearch && matchesGrupo
@@ -128,7 +128,7 @@ export default function AlumnosPage() {
                 <SelectValue placeholder="Todos los grupos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos los grupos</SelectItem>
+                <SelectItem value="all">Todos los grupos</SelectItem>
                 {grupos?.map((grupo) => (
                   <SelectItem key={grupo.id} value={String(grupo.id)}>
                     {grupo.grado?.nivel?.nombre} - {grupo.grado?.nombre} {grupo.nombre}

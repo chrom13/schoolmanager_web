@@ -11,6 +11,9 @@ import DashboardPage from '@/features/dashboard/pages/DashboardPage'
 
 // Estructura Académica
 import NivelesPage from '@/features/estructura/pages/NivelesPage'
+import GradosPage from '@/features/estructura/pages/GradosPage'
+import GruposPage from '@/features/estructura/pages/GruposPage'
+import MateriasPage from '@/features/estructura/pages/MateriasPage'
 
 export const router = createBrowserRouter([
   {
@@ -39,15 +42,15 @@ export const router = createBrowserRouter([
           },
           {
             path: 'grados',
-            element: <div className="text-center p-8">Página de Grados - Próximamente</div>,
+            element: <GradosPage />,
           },
           {
             path: 'grupos',
-            element: <div className="text-center p-8">Página de Grupos - Próximamente</div>,
+            element: <GruposPage />,
           },
           {
             path: 'materias',
-            element: <div className="text-center p-8">Página de Materias - Próximamente</div>,
+            element: <MateriasPage />,
           },
           // Otros módulos
           {

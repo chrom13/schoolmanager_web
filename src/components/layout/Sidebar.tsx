@@ -8,6 +8,8 @@ import {
   BookOpen,
   ClipboardCheck,
   Settings,
+  Layers,
+  Grid,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/authStore'
@@ -20,54 +22,91 @@ interface NavItem {
   roles?: UserRole[]
 }
 
-const navigationItems: NavItem[] = [
+interface NavSection {
+  title: string
+  items: NavItem[]
+}
+
+const navigationSections: NavSection[] = [
   {
-    label: 'Dashboard',
-    href: '/',
-    icon: LayoutDashboard,
-    roles: [UserRole.DIRECTOR, UserRole.ADMIN],
+    title: 'Principal',
+    items: [
+      {
+        label: 'Dashboard',
+        href: '/',
+        icon: LayoutDashboard,
+        roles: [UserRole.DIRECTOR, UserRole.ADMIN],
+      },
+    ],
   },
   {
-    label: 'Alumnos',
-    href: '/alumnos',
-    icon: Users,
-    roles: [UserRole.DIRECTOR, UserRole.ADMIN],
+    title: 'Estructura Académica',
+    items: [
+      {
+        label: 'Niveles',
+        href: '/niveles',
+        icon: Layers,
+        roles: [UserRole.DIRECTOR, UserRole.ADMIN],
+      },
+      {
+        label: 'Grados',
+        href: '/grados',
+        icon: Grid,
+        roles: [UserRole.DIRECTOR, UserRole.ADMIN],
+      },
+      {
+        label: 'Grupos',
+        href: '/grupos',
+        icon: ClipboardCheck,
+        roles: [UserRole.DIRECTOR, UserRole.ADMIN],
+      },
+      {
+        label: 'Materias',
+        href: '/materias',
+        icon: BookOpen,
+        roles: [UserRole.DIRECTOR, UserRole.ADMIN],
+      },
+    ],
   },
   {
-    label: 'Calificaciones',
-    href: '/calificaciones',
-    icon: GraduationCap,
-    roles: [UserRole.DIRECTOR, UserRole.ADMIN, UserRole.MAESTRO],
+    title: 'Gestión',
+    items: [
+      {
+        label: 'Alumnos',
+        href: '/alumnos',
+        icon: Users,
+        roles: [UserRole.DIRECTOR, UserRole.ADMIN],
+      },
+      {
+        label: 'Calificaciones',
+        href: '/calificaciones',
+        icon: GraduationCap,
+        roles: [UserRole.DIRECTOR, UserRole.ADMIN, UserRole.MAESTRO],
+      },
+      {
+        label: 'Asistencias',
+        href: '/asistencias',
+        icon: Calendar,
+        roles: [UserRole.DIRECTOR, UserRole.ADMIN, UserRole.MAESTRO],
+      },
+      {
+        label: 'Cobranza',
+        href: '/cobranza',
+        icon: DollarSign,
+        roles: [UserRole.DIRECTOR, UserRole.ADMIN],
+      },
+    ],
   },
   {
-    label: 'Asistencias',
-    href: '/asistencias',
-    icon: Calendar,
-    roles: [UserRole.DIRECTOR, UserRole.ADMIN, UserRole.MAESTRO],
-  },
-  {
-    label: 'Cobranza',
-    href: '/cobranza',
-    icon: DollarSign,
-    roles: [UserRole.DIRECTOR, UserRole.ADMIN],
-  },
-  {
-    label: 'Materias',
-    href: '/materias',
-    icon: BookOpen,
-    roles: [UserRole.DIRECTOR, UserRole.ADMIN],
-  },
-  {
-    label: 'Grupos',
-    href: '/grupos',
-    icon: ClipboardCheck,
-    roles: [UserRole.DIRECTOR, UserRole.ADMIN],
-  },
-  {
-    label: 'Configuración',
-    href: '/configuracion',
-    icon: Settings,
-    roles: [UserRole.DIRECTOR],
+    title: 'Configuración',
+    items: [
+      {
+        label: 'Configuración',
+        href: '/configuracion',
+        icon: Settings,
+        roles: [UserRole.DIRECTOR],
+      },
+    ],
   },
 ]
 
@@ -75,9 +114,12 @@ export function Sidebar() {
   const location = useLocation()
   const { user } = useAuthStore()
 
-  const filteredNavItems = navigationItems.filter(
-    (item) => !item.roles || item.roles.includes(user?.rol as UserRole)
-  )
+  const filteredSections = navigationSections.map((section) => ({
+    ...section,
+    items: section.items.filter(
+      (item) => !item.roles || item.roles.includes(user?.rol as UserRole)
+    ),
+  })).filter((section) => section.items.length > 0)
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r border-gray-200 transition-transform">
@@ -94,29 +136,36 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-4">
-        <ul className="space-y-1">
-          {filteredNavItems.map((item) => {
-            const Icon = item.icon
-            const isActive = location.pathname === item.href
+        {filteredSections.map((section, sectionIndex) => (
+          <div key={section.title} className={sectionIndex > 0 ? 'mt-6' : ''}>
+            <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              {section.title}
+            </h3>
+            <ul className="space-y-1">
+              {section.items.map((item) => {
+                const Icon = item.icon
+                const isActive = location.pathname === item.href
 
-            return (
-              <li key={item.href}>
-                <Link
-                  to={item.href}
-                  className={cn(
-                    'flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors',
-                    isActive
-                      ? 'bg-primary text-white'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  )}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{item.label}</span>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
+                return (
+                  <li key={item.href}>
+                    <Link
+                      to={item.href}
+                      className={cn(
+                        'flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors',
+                        isActive
+                          ? 'bg-primary text-white'
+                          : 'text-gray-700 hover:bg-gray-100'
+                      )}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span>{item.label}</span>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
 
       {/* User Info */}

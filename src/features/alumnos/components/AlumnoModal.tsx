@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -21,7 +21,9 @@ import {
 } from '@/components/ui/select'
 import { useAlumnos } from '../hooks/useAlumnos'
 import { useTutores } from '../hooks/useTutores'
+import { usePadres } from '../hooks/usePadres'
 import { useGrupos } from '@/features/estructura/hooks/useGrupos'
+import { PadresFieldArray, type PadreFormData } from './PadresFieldArray'
 import type { Alumno } from '@/types/alumnos.types'
 
 const alumnoSchema = z.object({
@@ -50,6 +52,9 @@ export function AlumnoModal({ open, onClose, alumno }: AlumnoModalProps) {
   const { create, update } = useAlumnos()
   const { tutores } = useTutores()
   const { grupos } = useGrupos()
+  const padresHook = usePadres()
+
+  const [padres, setPadres] = useState<PadreFormData[]>([])
 
   const {
     register,
@@ -79,8 +84,27 @@ export function AlumnoModal({ open, onClose, alumno }: AlumnoModalProps) {
       setValue('email', alumno.email || '')
       if (alumno.grupo_id) setValue('grupo_id', String(alumno.grupo_id))
       if (alumno.tutor_id) setValue('tutor_id', String(alumno.tutor_id))
+
+      // Cargar padres del alumno
+      if (alumno.padres && alumno.padres.length > 0) {
+        setPadres(
+          alumno.padres.map((ap) => ({
+            id: ap.padre?.id,
+            nombre_completo: ap.padre?.nombre_completo || '',
+            email: ap.padre?.email || '',
+            telefono: ap.padre?.telefono || '',
+            rfc: ap.padre?.rfc,
+            parentesco: ap.parentesco,
+            responsable_pagos: ap.responsable_pagos,
+            contacto_emergencia: ap.contacto_emergencia,
+          }))
+        )
+      } else {
+        setPadres([])
+      }
     } else {
       reset()
+      setPadres([])
     }
   }, [alumno, setValue, reset])
 
@@ -99,13 +123,51 @@ export function AlumnoModal({ open, onClose, alumno }: AlumnoModalProps) {
       tutor_id: data.tutor_id ? Number(data.tutor_id) : undefined,
     }
 
-    if (alumno) {
-      await update.mutateAsync({ id: alumno.id, data: payload })
-    } else {
-      await create.mutateAsync(payload)
+    try {
+      let alumnoId: number
+
+      if (alumno) {
+        await update.mutateAsync({ id: alumno.id, data: payload })
+        alumnoId = alumno.id
+      } else {
+        const newAlumno = await create.mutateAsync(payload)
+        alumnoId = newAlumno.id
+      }
+
+      // Procesar padres
+      for (const padre of padres) {
+        if (!padre.nombre_completo || !padre.email) continue
+
+        // Si el padre ya existe (tiene id), vincularlo
+        if (padre.id) {
+          await padresHook.attachAlumno(padre.id, alumnoId, {
+            parentesco: padre.parentesco,
+            responsable_pagos: padre.responsable_pagos,
+            contacto_emergencia: padre.contacto_emergencia,
+          })
+        } else {
+          // Crear nuevo padre y vincularlo
+          const nuevoPadre = await padresHook.create({
+            nombre_completo: padre.nombre_completo,
+            email: padre.email,
+            telefono: padre.telefono,
+            rfc: padre.rfc,
+          })
+
+          await padresHook.attachAlumno(nuevoPadre.id, alumnoId, {
+            parentesco: padre.parentesco,
+            responsable_pagos: padre.responsable_pagos,
+            contacto_emergencia: padre.contacto_emergencia,
+          })
+        }
+      }
+
+      reset()
+      setPadres([])
+      onClose()
+    } catch (error) {
+      console.error('Error al guardar alumno:', error)
     }
-    reset()
-    onClose()
   }
 
   return (
@@ -235,6 +297,11 @@ export function AlumnoModal({ open, onClose, alumno }: AlumnoModalProps) {
             </div>
           </div>
 
+          {/* Padres/Tutores */}
+          <div className="space-y-4">
+            <PadresFieldArray padres={padres} onChange={setPadres} />
+          </div>
+
           {/* Asignación */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-gray-700">Asignación</h3>
@@ -261,7 +328,7 @@ export function AlumnoModal({ open, onClose, alumno }: AlumnoModalProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="tutor_id">Tutor</Label>
+                <Label htmlFor="tutor_id">Tutor (Antiguo)</Label>
                 <Select
                   value={selectedTutorId || 'none'}
                   onValueChange={(value) => setValue('tutor_id', value === 'none' ? undefined : value)}
@@ -278,6 +345,9 @@ export function AlumnoModal({ open, onClose, alumno }: AlumnoModalProps) {
                     ))}
                   </SelectContent>
                 </Select>
+                <p className="text-xs text-gray-500">
+                  Usa la sección de Padres/Tutores arriba para agregar padres
+                </p>
               </div>
             </div>
           </div>

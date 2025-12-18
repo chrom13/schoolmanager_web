@@ -1,4 +1,28 @@
-import type { Grupo } from './estructura.types'
+import type { Grupo } from './models'
+
+export interface Padre {
+  id: number
+  escuela_id: number
+  nombre_completo: string
+  email?: string
+  telefono?: string
+  rfc?: string
+  regimen_fiscal?: string
+  uso_cfdi?: string
+  codigo_postal?: string
+  activo: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface AlumnoPadre {
+  padre_id: number
+  alumno_id: number
+  parentesco: 'padre' | 'madre' | 'tutor' | 'abuelo' | 'otro'
+  responsable_pagos: boolean
+  contacto_emergencia: boolean
+  padre?: Padre
+}
 
 export interface Tutor {
   id: number
@@ -33,6 +57,7 @@ export interface Alumno {
   updated_at: string
   grupo?: Grupo
   tutor?: Tutor
+  padres?: AlumnoPadre[]
 }
 
 export interface CreateAlumnoData {

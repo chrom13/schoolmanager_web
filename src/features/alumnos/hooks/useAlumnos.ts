@@ -69,3 +69,11 @@ export const useAlumnosByGrupo = (grupoId: number | undefined) => {
     enabled: !!grupoId,
   })
 }
+
+export const useAlumno = (id: number) => {
+  return useQuery({
+    queryKey: ['alumnos', id],
+    queryFn: () => alumnosApi.getById(id),
+    enabled: !!id,
+  })
+}

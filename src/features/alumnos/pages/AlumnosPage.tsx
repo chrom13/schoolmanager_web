@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Plus, Edit, Trash2, Search, Filter } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -34,6 +35,7 @@ import { AlumnoModal } from '../components/AlumnoModal'
 import type { Alumno } from '@/types/alumnos.types'
 
 export default function AlumnosPage() {
+  const navigate = useNavigate()
   const { alumnos, isLoading, delete: deleteAlumno } = useAlumnos()
   const { grupos } = useGrupos()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -169,7 +171,11 @@ export default function AlumnosPage() {
               </TableRow>
             ) : (
               filteredAlumnos?.map((alumno) => (
-                <TableRow key={alumno.id}>
+                <TableRow
+                  key={alumno.id}
+                  className="cursor-pointer hover:bg-gray-50"
+                  onClick={() => navigate(`/alumnos/${alumno.id}`)}
+                >
                   <TableCell className="font-mono text-sm">
                     {alumno.matricula}
                   </TableCell>
@@ -215,14 +221,20 @@ export default function AlumnosPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleEdit(alumno)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleEdit(alumno)
+                        }}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => setAlumnoToDelete(alumno)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setAlumnoToDelete(alumno)
+                        }}
                       >
                         <Trash2 className="h-4 w-4 text-red-500" />
                       </Button>

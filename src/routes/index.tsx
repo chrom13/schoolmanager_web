@@ -17,6 +17,7 @@ import MateriasPage from '@/features/estructura/pages/MateriasPage'
 
 // Alumnos
 import AlumnosPage from '@/features/alumnos/pages/AlumnosPage'
+import AlumnoProfilePage from '@/features/alumnos/pages/AlumnoProfilePage'
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
           {
             path: 'alumnos',
             element: <AlumnosPage />,
+          },
+          {
+            path: 'alumnos/:id',
+            element: <AlumnoProfilePage />,
           },
           {
             path: 'calificaciones',

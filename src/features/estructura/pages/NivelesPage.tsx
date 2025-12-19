@@ -29,8 +29,10 @@ export default function NivelesPage() {
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => nivelesApi.delete(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['niveles'] });
+    onSuccess: async () => {
+      // Invalidar y refetch inmediato
+      await queryClient.invalidateQueries({ queryKey: ['niveles'] });
+      await queryClient.refetchQueries({ queryKey: ['niveles'] });
       toast.success('Nivel eliminado exitosamente');
       handleCloseConfirmDelete();
     },
@@ -169,6 +171,7 @@ export default function NivelesPage() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         nivel={selectedNivel}
+        existingNiveles={niveles}
       />
 
       <ConfirmDialog

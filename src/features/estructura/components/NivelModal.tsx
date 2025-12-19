@@ -33,11 +33,17 @@ interface NivelModalProps {
   isOpen: boolean;
   onClose: () => void;
   nivel: Nivel | null;
+  existingNiveles?: Nivel[];
 }
 
-export function NivelModal({ isOpen, onClose, nivel }: NivelModalProps) {
+export function NivelModal({ isOpen, onClose, nivel, existingNiveles = [] }: NivelModalProps) {
   const { create, update, isCreating, isUpdating } = useNiveles();
   const isEdit = Boolean(nivel);
+
+  // Nombres de niveles ya registrados (excepto el actual si estamos editando)
+  const existingNombres = existingNiveles
+    .filter(n => !isEdit || n.id !== nivel?.id)
+    .map(n => n.nombre);
 
   const {
     setValue,
@@ -115,11 +121,18 @@ export function NivelModal({ isOpen, onClose, nivel }: NivelModalProps) {
                 <SelectValue placeholder="Selecciona un nivel" />
               </SelectTrigger>
               <SelectContent>
-                {nivelesOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
+                {nivelesOptions.map((option) => {
+                  const isDisabled = existingNombres.includes(option.value as any);
+                  return (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value}
+                      disabled={isDisabled}
+                    >
+                      {option.label} {isDisabled && '(Ya registrado)'}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
             {errors.nombre && (

@@ -45,7 +45,7 @@ export default function DashboardPage() {
           ¡Bienvenido, {user?.nombre}!
         </h1>
         <p className="text-gray-600 mt-2">
-          Aquí está el resumen de {user?.escuela.nombre}
+          Aquí está el resumen de {user?.escuela?.nombre || 'tu escuela'}
         </p>
       </div>
 

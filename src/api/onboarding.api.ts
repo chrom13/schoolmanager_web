@@ -1,4 +1,4 @@
-import api from './axios'
+import apiClient from './client'
 import type {
   OnboardingStatusResponse,
   OnboardingResponse,
@@ -13,7 +13,7 @@ export const onboardingApi = {
    * Obtener estado del onboarding
    */
   getStatus: async (): Promise<OnboardingStatusResponse> => {
-    const response = await api.get<OnboardingStatusResponse>('/onboarding/status')
+    const response = await apiClient.get<OnboardingStatusResponse>('/onboarding/status')
     return response.data
   },
 
@@ -21,7 +21,7 @@ export const onboardingApi = {
    * Completar datos de la escuela (Paso 1)
    */
   completeSchoolData: async (data: SchoolDataOnboarding): Promise<OnboardingResponse> => {
-    const response = await api.post<OnboardingResponse>('/onboarding/complete-school-data', data)
+    const response = await apiClient.post<OnboardingResponse>('/onboarding/complete-school-data', data)
     return response.data
   },
 
@@ -29,7 +29,7 @@ export const onboardingApi = {
    * Completar estructura académica (Paso 2)
    */
   completeStructure: async (): Promise<OnboardingResponse> => {
-    const response = await api.post<OnboardingResponse>('/onboarding/complete-structure')
+    const response = await apiClient.post<OnboardingResponse>('/onboarding/complete-structure')
     return response.data
   },
 
@@ -37,7 +37,7 @@ export const onboardingApi = {
    * Marcar onboarding como completado
    */
   complete: async (): Promise<OnboardingResponse> => {
-    const response = await api.post<OnboardingResponse>('/onboarding/complete')
+    const response = await apiClient.post<OnboardingResponse>('/onboarding/complete')
     return response.data
   },
 
@@ -45,7 +45,7 @@ export const onboardingApi = {
    * Saltar onboarding (permite completarlo después)
    */
   skip: async (): Promise<{ message: string }> => {
-    const response = await api.post<{ message: string }>('/onboarding/skip')
+    const response = await apiClient.post<{ message: string }>('/onboarding/skip')
     return response.data
   },
 }

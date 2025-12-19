@@ -38,13 +38,14 @@ export default function NivelesPage() {
     setIsConfirmDeleteOpen(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (nivelToDelete) {
-      deleteMutation.mutate(nivelToDelete.id, {
-        onSuccess: () => {
-          handleCloseConfirmDelete();
-        },
-      });
+      try {
+        await deleteMutation.mutateAsync(nivelToDelete.id);
+        handleCloseConfirmDelete();
+      } catch (error) {
+        // Error ya manejado por el mutation
+      }
     }
   };
 

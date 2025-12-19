@@ -8,6 +8,7 @@ export const useNiveles = () => {
   const { data: niveles, isLoading, error } = useQuery({
     queryKey: ['niveles'],
     queryFn: nivelesApi.getAll,
+    staleTime: 0, // Siempre considerar datos como stale para refetch inmediato
   });
 
   const createMutation = useMutation({
@@ -35,8 +36,9 @@ export const useNiveles = () => {
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => nivelesApi.delete(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['niveles'] });
+    onSuccess: async () => {
+      // Forzar refetch inmediato
+      await queryClient.refetchQueries({ queryKey: ['niveles'], exact: true });
       toast.success('Nivel eliminado exitosamente');
     },
     onError: (error: any) => {
@@ -51,7 +53,7 @@ export const useNiveles = () => {
     create: createMutation.mutate,
     update: updateMutation.mutate,
     delete: deleteMutation.mutate,
-    deleteMutation, // Export the whole mutation so we can access isPending
+    deleteMutation, // Export the whole mutation so we can access isPending and mutateAsync
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,

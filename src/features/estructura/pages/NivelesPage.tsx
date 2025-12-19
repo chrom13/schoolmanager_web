@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useNiveles } from '../hooks/useNiveles';
 import { NivelModal } from '../components/NivelModal';
 import type { Nivel } from '@/types/models';
@@ -19,6 +20,8 @@ export default function NivelesPage() {
   const { niveles, isLoading, delete: deleteNivel, isDeleting } = useNiveles();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNivel, setSelectedNivel] = useState<Nivel | null>(null);
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
+  const [nivelToDelete, setNivelToDelete] = useState<{ id: number; nombre: string } | null>(null);
 
   const handleCreate = () => {
     setSelectedNivel(null);
@@ -30,10 +33,20 @@ export default function NivelesPage() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este nivel?')) {
-      deleteNivel(id);
+  const handleDeleteClick = (nivel: Nivel) => {
+    setNivelToDelete({ id: nivel.id, nombre: nivel.nombre });
+    setIsConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (nivelToDelete) {
+      deleteNivel(nivelToDelete.id);
     }
+  };
+
+  const handleCloseConfirmDelete = () => {
+    setIsConfirmDeleteOpen(false);
+    setNivelToDelete(null);
   };
 
   const handleCloseModal = () => {
@@ -121,7 +134,7 @@ export default function NivelesPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDelete(nivel.id)}
+                          onClick={() => handleDeleteClick(nivel)}
                           disabled={isDeleting}
                         >
                           <Trash2 className="h-4 w-4 text-red-500" />
@@ -140,6 +153,18 @@ export default function NivelesPage() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         nivel={selectedNivel}
+      />
+
+      <ConfirmDialog
+        isOpen={isConfirmDeleteOpen}
+        onClose={handleCloseConfirmDelete}
+        onConfirm={handleConfirmDelete}
+        title="Eliminar Nivel"
+        description={`¿Estás seguro de que deseas eliminar el nivel "${getNivelLabel(nivelToDelete?.nombre || '')}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        variant="danger"
+        isLoading={isDeleting}
       />
     </div>
   );

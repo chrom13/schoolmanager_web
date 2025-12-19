@@ -18,6 +18,18 @@ export interface Escuela {
   regimen_fiscal?: string
   stripe_account_id?: string
   activo: boolean
+  onboarding_completado?: boolean
+  es_registro_express?: boolean
+  onboarding_data?: {
+    paso_actual?: string
+    fecha_registro?: string
+    skipped?: boolean
+    skipped_at?: string
+    [key: string]: any
+  }
+  onboarding_completado_at?: string
+  created_at?: string
+  updated_at?: string
 }
 
 export interface Usuario {

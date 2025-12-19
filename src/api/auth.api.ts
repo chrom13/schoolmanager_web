@@ -1,5 +1,6 @@
 import apiClient from './client'
 import type { LoginCredentials, RegisterData, AuthResponse, Usuario } from '@/types/auth.types'
+import type { RegisterExpressData, AuthResponseExpress } from '@/types/onboarding.types'
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
@@ -20,6 +21,11 @@ export const authApi = {
       escuela: data.data.escuela,
       token: data.data.token,
     }
+  },
+
+  registerExpress: async (registerData: RegisterExpressData): Promise<AuthResponseExpress> => {
+    const { data } = await apiClient.post('/auth/register-express', registerData)
+    return data
   },
 
   me: async (): Promise<Usuario> => {

@@ -5,6 +5,7 @@ import { AppLayout } from '@/components/layout/AppLayout'
 // Auth pages
 import LoginPage from '@/features/auth/pages/LoginPage'
 import RegisterPage from '@/features/auth/pages/RegisterPage'
+import RegisterExpressPage from '@/features/auth/pages/RegisterExpressPage'
 
 // Dashboard
 import DashboardPage from '@/features/dashboard/pages/DashboardPage'
@@ -19,6 +20,13 @@ import MateriasPage from '@/features/estructura/pages/MateriasPage'
 import AlumnosPage from '@/features/alumnos/pages/AlumnosPage'
 import AlumnoProfilePage from '@/features/alumnos/pages/AlumnoProfilePage'
 
+// Onboarding
+import OnboardingLayout from '@/features/onboarding/layouts/OnboardingLayout'
+import OnboardingWelcomePage from '@/features/onboarding/pages/OnboardingWelcomePage'
+import OnboardingSchoolDataPage from '@/features/onboarding/pages/OnboardingSchoolDataPage'
+import OnboardingStructurePage from '@/features/onboarding/pages/OnboardingStructurePage'
+import OnboardingCompletePage from '@/features/onboarding/pages/OnboardingCompletePage'
+
 export const router = createBrowserRouter([
   {
     path: '/login',
@@ -29,9 +37,37 @@ export const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
+    path: '/register-express',
+    element: <RegisterExpressPage />,
+  },
+  {
     path: '/',
     element: <ProtectedRoute />,
     children: [
+      // Onboarding flow
+      {
+        path: 'onboarding',
+        element: <OnboardingLayout />,
+        children: [
+          {
+            path: 'bienvenida',
+            element: <OnboardingWelcomePage />,
+          },
+          {
+            path: 'paso-1',
+            element: <OnboardingSchoolDataPage />,
+          },
+          {
+            path: 'paso-2',
+            element: <OnboardingStructurePage />,
+          },
+          {
+            path: 'completado',
+            element: <OnboardingCompletePage />,
+          },
+        ],
+      },
+      // Main app
       {
         element: <AppLayout />,
         children: [

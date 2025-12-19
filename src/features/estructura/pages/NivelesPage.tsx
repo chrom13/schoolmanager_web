@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,30 +14,14 @@ import {
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useNiveles } from '../hooks/useNiveles';
 import { NivelModal } from '../components/NivelModal';
-import { nivelesApi } from '@/api/niveles.api';
 import type { Nivel } from '@/types/models';
 
 export default function NivelesPage() {
-  const queryClient = useQueryClient();
-  const { niveles, isLoading } = useNiveles();
+  const { niveles, isLoading, deleteMutation } = useNiveles();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNivel, setSelectedNivel] = useState<Nivel | null>(null);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
   const [nivelToDelete, setNivelToDelete] = useState<{ id: number; nombre: string } | null>(null);
-
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => nivelesApi.delete(id),
-    onSuccess: async () => {
-      // Invalidar y refetch inmediato
-      await queryClient.invalidateQueries({ queryKey: ['niveles'] });
-      await queryClient.refetchQueries({ queryKey: ['niveles'] });
-      toast.success('Nivel eliminado exitosamente');
-      handleCloseConfirmDelete();
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Error al eliminar nivel');
-    },
-  });
 
   const handleCreate = () => {
     setSelectedNivel(null);
@@ -58,7 +40,11 @@ export default function NivelesPage() {
 
   const handleConfirmDelete = () => {
     if (nivelToDelete) {
-      deleteMutation.mutate(nivelToDelete.id);
+      deleteMutation.mutate(nivelToDelete.id, {
+        onSuccess: () => {
+          handleCloseConfirmDelete();
+        },
+      });
     }
   };
 

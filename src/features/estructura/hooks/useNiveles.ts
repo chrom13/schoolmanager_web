@@ -51,6 +51,7 @@ export const useNiveles = () => {
     create: createMutation.mutate,
     update: updateMutation.mutate,
     delete: deleteMutation.mutate,
+    deleteMutation, // Export the whole mutation so we can access isPending
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,

@@ -60,7 +60,7 @@ export function ConfirmDialog({
 
   const handleConfirm = () => {
     onConfirm()
-    onClose()
+    // No cerramos aquí - el componente padre debe cerrar después de la operación exitosa
   }
 
   return (

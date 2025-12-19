@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,14 +16,28 @@ import {
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useNiveles } from '../hooks/useNiveles';
 import { NivelModal } from '../components/NivelModal';
+import { nivelesApi } from '@/api/niveles.api';
 import type { Nivel } from '@/types/models';
 
 export default function NivelesPage() {
-  const { niveles, isLoading, delete: deleteNivel, isDeleting } = useNiveles();
+  const queryClient = useQueryClient();
+  const { niveles, isLoading } = useNiveles();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNivel, setSelectedNivel] = useState<Nivel | null>(null);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
   const [nivelToDelete, setNivelToDelete] = useState<{ id: number; nombre: string } | null>(null);
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => nivelesApi.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['niveles'] });
+      toast.success('Nivel eliminado exitosamente');
+      handleCloseConfirmDelete();
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || 'Error al eliminar nivel');
+    },
+  });
 
   const handleCreate = () => {
     setSelectedNivel(null);
@@ -40,7 +56,7 @@ export default function NivelesPage() {
 
   const handleConfirmDelete = () => {
     if (nivelToDelete) {
-      deleteNivel(nivelToDelete.id);
+      deleteMutation.mutate(nivelToDelete.id);
     }
   };
 
@@ -127,7 +143,7 @@ export default function NivelesPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleEdit(nivel)}
-                          disabled={isDeleting}
+                          disabled={deleteMutation.isPending}
                         >
                           <Pencil className="h-4 w-4" />
                         </Button>
@@ -135,7 +151,7 @@ export default function NivelesPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteClick(nivel)}
-                          disabled={isDeleting}
+                          disabled={deleteMutation.isPending}
                         >
                           <Trash2 className="h-4 w-4 text-red-500" />
                         </Button>
@@ -164,7 +180,7 @@ export default function NivelesPage() {
         confirmText="Eliminar"
         cancelText="Cancelar"
         variant="danger"
-        isLoading={isDeleting}
+        isLoading={deleteMutation.isPending}
       />
     </div>
   );

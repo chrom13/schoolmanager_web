@@ -42,7 +42,7 @@ export default function DashboardPage() {
       {/* Welcome Section */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">
-          ¡Bienvenido, {user?.nombre}!
+          ¡Bienvenido, {user?.name}!
         </h1>
         <p className="text-gray-600 mt-2">
           Aquí está el resumen de {user?.escuela?.nombre || 'tu escuela'}

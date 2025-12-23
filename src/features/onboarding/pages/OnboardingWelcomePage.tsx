@@ -43,7 +43,7 @@ export default function OnboardingWelcomePage() {
             ¡Cuenta creada exitosamente!
           </h1>
           <p className="text-lg text-gray-600">
-            Bienvenido, <span className="font-semibold">{user?.nombre}</span>
+            Bienvenido, <span className="font-semibold">{user?.name}</span>
           </p>
         </div>
 

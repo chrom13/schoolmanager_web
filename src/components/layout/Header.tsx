@@ -60,12 +60,12 @@ export function Header() {
             >
               <div className="text-right">
                 <p className="text-sm font-medium text-gray-900">
-                  {user?.nombre}
+                  {user?.name}
                 </p>
                 <p className="text-xs text-gray-500 capitalize">{user?.rol}</p>
               </div>
               <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
-                {user?.nombre.charAt(0).toUpperCase()}
+                {user?.name?.charAt(0).toUpperCase()}
               </div>
             </button>
 
@@ -74,7 +74,7 @@ export function Header() {
               <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
                 <div className="px-4 py-3 border-b border-gray-200">
                   <p className="text-sm font-medium text-gray-900">
-                    {user?.nombre}
+                    {user?.name}
                   </p>
                   <p className="text-sm text-gray-500 truncate">{user?.email}</p>
                 </div>

@@ -17,7 +17,6 @@ export interface Escuela {
   codigo_postal?: string
   regimen_fiscal?: string
   stripe_account_id?: string
-  activo: boolean
   onboarding_completado?: boolean
   es_registro_express?: boolean
   onboarding_data?: {
@@ -30,16 +29,18 @@ export interface Escuela {
   onboarding_completado_at?: string
   created_at?: string
   updated_at?: string
+  deleted_at?: string | null
 }
 
 export interface Usuario {
   id: number
   escuela_id: number
-  nombre: string
+  name: string
   email: string
+  email_verified_at?: string | null
   rol: UserRole
-  activo: boolean
   escuela: Escuela
+  deleted_at?: string | null
 }
 
 export interface LoginCredentials {

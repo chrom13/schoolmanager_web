@@ -75,14 +75,12 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <img
-            src="/theme/img/logo2.png"
-            alt="Logo"
-            className="h-16 mx-auto mb-4"
-          />
-          <h1 className="text-2xl font-bold text-gray-800">
-            Sistema de Gestión Escolar
+          <h1 className="text-4xl font-bold text-indigo-600 mb-2">
+            Escolaric
           </h1>
+          <p className="text-gray-600">
+            Sistema de Gestión Escolar
+          </p>
         </div>
 
         {/* Login Box */}
@@ -171,12 +169,12 @@ export default function LoginPage() {
                   Recordarme
                 </Label>
               </div>
-              <a
-                href="#"
+              <Link
+                to="/forgot-password"
                 className="text-sm text-blue-600 hover:text-blue-700"
               >
                 ¿Olvidaste tu contraseña?
-              </a>
+              </Link>
             </div>
 
             {/* Submit Button */}
@@ -203,7 +201,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-600">
-          <p>© 2025 School Manager. Todos los derechos reservados.</p>
+          <p>© 2025 Escolaric. Todos los derechos reservados.</p>
         </div>
       </div>
     </div>

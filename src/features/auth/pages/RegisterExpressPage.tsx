@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import toast from 'react-hot-toast'
-import { Building2, Mail, Lock, CheckCircle2, Zap } from 'lucide-react'
+import { Building2, Mail, Lock, CheckCircle2 } from 'lucide-react'
 
 import { authApi } from '@/api/auth.api'
 import { useAuthStore } from '@/stores/authStore'
@@ -83,15 +83,13 @@ export default function RegisterExpressPage() {
       <div className="w-full max-w-lg">
         {/* Logo y Header */}
         <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="bg-indigo-600 text-white p-3 rounded-full">
-              <Zap className="h-8 w-8" />
-            </div>
-          </div>
-          <h1 className="text-3xl font-bold text-gray-800">
-            Registro Express
+          <h1 className="text-4xl font-bold text-indigo-600 mb-2">
+            Escolaric
           </h1>
-          <p className="text-gray-600 mt-2">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Registro Express
+          </h2>
+          <p className="text-gray-600">
             Comienza en menos de 1 minuto
           </p>
         </div>
@@ -237,7 +235,7 @@ export default function RegisterExpressPage() {
 
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-600">
-          <p>© 2025 School Manager. Todos los derechos reservados.</p>
+          <p>© 2025 Escolaric. Todos los derechos reservados.</p>
         </div>
       </div>
     </div>

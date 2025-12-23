@@ -6,6 +6,10 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import LoginPage from '@/features/auth/pages/LoginPage'
 import RegisterPage from '@/features/auth/pages/RegisterPage'
 import RegisterExpressPage from '@/features/auth/pages/RegisterExpressPage'
+import ForgotPasswordPage from '@/features/auth/pages/ForgotPasswordPage'
+import ResetPasswordPage from '@/features/auth/pages/ResetPasswordPage'
+import VerifyEmailPage from '@/features/auth/pages/VerifyEmailPage'
+import VerifyEmailPendingPage from '@/features/auth/pages/VerifyEmailPendingPage'
 
 // Dashboard
 import DashboardPage from '@/features/dashboard/pages/DashboardPage'
@@ -39,6 +43,22 @@ export const router = createBrowserRouter([
   {
     path: '/register-express',
     element: <RegisterExpressPage />,
+  },
+  {
+    path: '/forgot-password',
+    element: <ForgotPasswordPage />,
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPasswordPage />,
+  },
+  {
+    path: '/verify-email',
+    element: <VerifyEmailPage />,
+  },
+  {
+    path: '/verify-email-pending',
+    element: <VerifyEmailPendingPage />,
   },
   {
     path: '/',

@@ -36,4 +36,29 @@ export const authApi = {
   logout: async (): Promise<void> => {
     await apiClient.post('/auth/logout')
   },
+
+  forgotPassword: async (email: string): Promise<{ message: string; token?: string; reset_url?: string }> => {
+    const { data } = await apiClient.post('/auth/forgot-password', { email })
+    return data
+  },
+
+  resetPassword: async (resetData: {
+    email: string
+    password: string
+    password_confirmation: string
+    token: string
+  }): Promise<{ message: string }> => {
+    const { data } = await apiClient.post('/auth/reset-password', resetData)
+    return data
+  },
+
+  verifyEmail: async (id: string, hash: string): Promise<{ message: string }> => {
+    const { data } = await apiClient.get(`/auth/verify-email?id=${id}&hash=${hash}`)
+    return data
+  },
+
+  resendVerificationEmail: async (): Promise<{ message: string }> => {
+    const { data } = await apiClient.post('/auth/resend-verification-email')
+    return data
+  },
 }

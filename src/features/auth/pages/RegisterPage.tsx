@@ -99,14 +99,12 @@ export default function RegisterPage() {
       <div className="w-full max-w-2xl">
         {/* Logo */}
         <div className="text-center mb-8">
-          <img
-            src="/theme/img/logo2.png"
-            alt="Logo"
-            className="h-16 mx-auto mb-4"
-          />
-          <h1 className="text-2xl font-bold text-gray-800">
-            Registra tu Escuela
+          <h1 className="text-4xl font-bold text-indigo-600 mb-2">
+            Escolaric
           </h1>
+          <h2 className="text-2xl font-bold text-gray-800">
+            Registra tu Escuela
+          </h2>
           <p className="text-gray-600 mt-2">
             Comienza a gestionar tu escuela de manera profesional
           </p>
@@ -324,7 +322,7 @@ export default function RegisterPage() {
 
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-600">
-          <p>© 2025 School Manager. Todos los derechos reservados.</p>
+          <p>© 2025 Escolaric. Todos los derechos reservados.</p>
         </div>
       </div>
     </div>

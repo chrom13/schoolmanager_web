@@ -182,11 +182,11 @@ export function Sidebar() {
       <div className="p-4 border-t border-gray-200 flex-shrink-0">
         <div className="flex items-center space-x-3">
           <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
-            {user?.nombre ? user.nombre.charAt(0).toUpperCase() : 'U'}
+            {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">
-              {user?.nombre || 'Usuario'}
+              {user?.name || 'Usuario'}
             </p>
             <p className="text-xs text-gray-500 capitalize">{user?.rol || 'Sin sesión'}</p>
           </div>

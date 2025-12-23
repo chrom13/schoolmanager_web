@@ -113,7 +113,7 @@ export default function NivelesPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Nombre</TableHead>
-                  <TableHead>Estado</TableHead>
+                  <TableHead>Alumnos</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
@@ -122,8 +122,8 @@ export default function NivelesPage() {
                   <TableRow key={nivel.id}>
                     <TableCell className="font-medium">{getNivelLabel(nivel.nombre)}</TableCell>
                     <TableCell>
-                      <Badge variant={nivel.activo ? 'success' : 'secondary'}>
-                        {nivel.activo ? 'Activo' : 'Inactivo'}
+                      <Badge variant="secondary">
+                        {nivel.total_alumnos || 0} {nivel.total_alumnos === 1 ? 'alumno' : 'alumnos'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">

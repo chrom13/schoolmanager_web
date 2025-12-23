@@ -4,9 +4,10 @@ export interface Nivel {
   id: number
   escuela_id: number
   nombre: 'preescolar' | 'primaria' | 'secundaria' | 'preparatoria'
-  activo: boolean
+  total_alumnos?: number
   created_at?: string
   updated_at?: string
+  deleted_at?: string | null
 }
 
 export interface Grado {
